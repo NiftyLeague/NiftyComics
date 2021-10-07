@@ -3,10 +3,13 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-import { ethers, network, tenderly, run } from 'hardhat';
+import { config, ethers, network, tenderly, run } from 'hardhat';
 import chalk from 'chalk';
+import fs from 'fs';
+import R from 'ramda';
 import ethProvider from 'eth-provider';
 import { BigNumber } from '@ethersproject/bignumber';
+import { Contract } from '@ethersproject/contracts';
 
 const targetNetwork = network.name;
 
@@ -31,6 +34,18 @@ const tenderlyVerify = async ({ contractName, contractAddress }: { contractName:
   console.log(chalk.grey(` 🧐 Contract verification not supported on ${targetNetwork}`));
 };
 
+// abi encodes contract arguments
+// useful when you want to manually verify the contracts
+// for example, on Etherscan
+const abiEncodeArgs = (deployed: Contract, contractArgs: unknown[]) => {
+  // not writing abi encoded args if this does not pass
+  if (!contractArgs || !deployed || !R.hasPath(['interface', 'deploy'], deployed)) {
+    return '';
+  }
+  const encoded = ethers.utils.defaultAbiCoder.encode(deployed.interface.deploy.inputs, contractArgs);
+  return encoded;
+};
+
 const getLedgerSigner = async () => {
   const frame = ethProvider('frame');
   const ledgerSigner = (await frame.request({ method: 'eth_requestAccounts' }))[0];
@@ -47,6 +62,8 @@ const deploy = async (contractName: string, _args: unknown[] = [], overrides = {
   const args = useSigner ? { signer: await getLedgerSigner() } : {};
   const contractFactory = await ethers.getContractFactory(contractName, args);
   const deployedContract = await contractFactory.deploy(...contractArgs, overrides);
+  const encoded = abiEncodeArgs(deployedContract, contractArgs);
+  fs.writeFileSync(`${config.paths.artifacts}/${contractName}.address`, deployedContract.address);
   let extraGasInfo = '';
   if (deployedContract && deployedContract.deployTransaction) {
     // wait for 5 confirmations for byte data to populate
@@ -67,6 +84,8 @@ const deploy = async (contractName: string, _args: unknown[] = [], overrides = {
 
   await deployedContract.deployed();
 
+  if (!encoded || encoded.length <= 2) return deployedContract;
+  fs.writeFileSync(`${config.paths.artifacts}/${contractName}.args`, encoded.slice(2));
   return deployedContract;
 };
 
