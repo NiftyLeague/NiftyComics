@@ -79,15 +79,16 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const comics = await deploy('NiftyComics', ['Hello, Hardhat!']);
+  const uri = `https://api.nifty-league.com/${targetNetwork}/launch-comics/`;
+  const comics = await deploy('NiftyLaunchComics', [uri]);
 
   await tenderlyVerify({
-    contractName: 'NiftyComics',
+    contractName: 'NiftyLaunchComics',
     contractAddress: comics.address,
   });
 
   console.log(chalk.blue(` 📁 Attempting etherscan verification of ${comics.address} on ${targetNetwork}`));
-  await run('verify:verify', { address: comics.address, constructorArguments: ['Hello, Hardhat!'] });
+  await run('verify:verify', { address: comics.address, constructorArguments: [uri] });
 }
 
 // We recommend this pattern to be able to use async/await everywhere
