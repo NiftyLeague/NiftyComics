@@ -7,9 +7,9 @@ import { config, ethers, network, tenderly, run } from 'hardhat';
 import chalk from 'chalk';
 import fs from 'fs';
 import R from 'ramda';
-import ethProvider from 'eth-provider';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Contract } from '@ethersproject/contracts';
+import { getLedgerSigner } from './ledger';
 
 const targetNetwork = network.name;
 
@@ -44,14 +44,6 @@ const abiEncodeArgs = (deployed: Contract, contractArgs: unknown[]) => {
   }
   const encoded = ethers.utils.defaultAbiCoder.encode(deployed.interface.deploy.inputs, contractArgs);
   return encoded;
-};
-
-const getLedgerSigner = async () => {
-  const frame = ethProvider('frame');
-  const ledgerSigner = (await frame.request({ method: 'eth_requestAccounts' }))[0];
-  const { Web3Provider } = ethers.providers;
-  const provider = new Web3Provider(frame);
-  return provider.getSigner(ledgerSigner);
 };
 
 const deploy = async (contractName: string, _args: unknown[] = [], overrides = {}) => {
