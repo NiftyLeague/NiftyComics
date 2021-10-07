@@ -1,4 +1,5 @@
-//SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
@@ -19,6 +20,10 @@ import "@openzeppelin/contracts/utils/Context.sol";
  */
 contract NiftyLaunchComics is Context, AccessControlEnumerable, ERC1155Burnable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    // Contract name
+    string public name = "Nifty Launch Comics";
+    // Contract symbol
+    string public symbol = "NLC";
 
     /**
      * @dev Grants `MINTER_ROLE` to the deployer
