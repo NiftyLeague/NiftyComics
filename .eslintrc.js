@@ -12,6 +12,14 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        ts: 'never',
+      },
+    ],
     'node/no-unsupported-features/es-syntax': ['error', { ignores: ['modules'] }],
   },
 };
