@@ -90,7 +90,7 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const uri = `https://api.nifty-league.com/${targetNetwork}/launch-comics/`;
+  const uri = `https://api.nifty-league.com/${targetNetwork}/launch-comics/{id}`;
   const comics = await deploy('NiftyLaunchComics', [uri]);
 
   await tenderlyVerify({
