@@ -1,7 +1,12 @@
 {
   "name": "@nifty-league/comics",
-  "engines": {
-    "node": "lts/fermium"
+  "scripts": {
+    "lint:sol": "solhint \"contracts/**/*.sol\"",
+    "prettier": "prettier --write \"contracts/**/*.sol\" \"test/**/*.ts\"",
+    "build": "npm run compile",
+    "compile": "npx hardhat compile",
+    "coverage": "npx hardhat coverage --network hardhat",
+    "test": "npx hardhat test"
   },
   "devDependencies": {
     "@ethersproject/bignumber": "^5.4.2",
@@ -10,6 +15,8 @@
     "@nomiclabs/hardhat-etherscan": "^2.1.6",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "^4.3.2",
+    "@openzeppelin/contracts-upgradeable": "^4.3.2",
+    "@openzeppelin/hardhat-upgrades": "^1.17.0",
     "@tenderly/hardhat-tenderly": "^1.0.12",
     "@typechain/ethers-v5": "^7.1.2",
     "@typechain/hardhat": "^2.3.0",
