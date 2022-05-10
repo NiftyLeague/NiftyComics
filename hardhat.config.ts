@@ -1,8 +1,10 @@
 import * as dotenv from 'dotenv';
 
 import { HardhatUserConfig, task } from 'hardhat/config';
+import '@openzeppelin/hardhat-upgrades';
 import '@nomiclabs/hardhat-etherscan';
 import '@nomiclabs/hardhat-waffle';
+import '@nomiclabs/hardhat-ethers';
 import '@tenderly/hardhat-tenderly';
 import '@typechain/hardhat';
 import 'hardhat-gas-reporter';
@@ -43,6 +45,7 @@ const config: HardhatUserConfig = {
     },
     ropsten: {
       url: `https://ropsten.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
