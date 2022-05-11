@@ -59,7 +59,7 @@ const deploy = async (contractName: string, _args: unknown[] = [], contractType:
   console.log(` 🛰  Deploying: ${contractName} to ${targetNetwork}`);
 
   const contractArgs = _args || [];
-  const useSigner = targetNetwork === 'ropsten123' || targetNetwork === 'mainnet';
+  const useSigner = targetNetwork === 'ropsten' || targetNetwork === 'mainnet';
   const args = useSigner ? { signer: await getLedgerSigner() } : {};
   const contractFactory = await ethers.getContractFactory(contractName, args);
 
