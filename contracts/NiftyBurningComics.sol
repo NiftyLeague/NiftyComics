@@ -23,10 +23,17 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
   /// @dev NiftyItems address
   address public items;
 
+  /// @dev NiftyBurningComics contract start time
+  uint256 public burningStartAt;
+
+  /// @dev NiftyBurningComics contract end time
+  uint256 public burningEndAt;
+
   function initialize(
     address _comics,
     address _keys,
-    address _items
+    address _items,
+    uint256 _burningStartAt
   ) public initializer {
     __Ownable_init();
     __ReentrancyGuard_init();
@@ -35,14 +42,21 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
     comics = _comics;
     keys = _keys;
     items = _items;
+    burningStartAt = _burningStartAt;
+    burningEndAt = _burningStartAt + 3600 * 24 * 30;  // 30 days period
   }
 
   /**
    * @notice Burn comics and returns the items associated with its page
-   * @dev User can burn all 6 comics at once to receive a key to the citadel.
+   * @dev User can burn all 6 comics at once to receive a key to the citadel
+   * @dev Burning comics are available only for 30 days
+   * @dev Key should be minted only for the last 15 days out of 30 days
    * @param _values Number of comics to burn, nth value means the number of nth comics(tokenId = n) to burn
    */
   function burnComics(uint256[] memory _values) external nonReentrant whenNotPaused {
+    // check if burning comics is valid
+    require(burningStartAt <= block.timestamp && block.timestamp <= burningEndAt, "Burning comics is not valid");
+
     // check _values param
     require(_values.length == 6, "Invalid length");
 
@@ -50,32 +64,38 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
     uint256[] memory tokenIds = new uint256[](6);
     uint256[] memory tokenNumbersForItems = new uint256[](6);
 
-    // check if all comics will be burned
-    bool isAllComicsBurning = true;
+    bool isForKeys = (burningStartAt + 3600 * 24 * 15) < block.timestamp;
+
+    // get tokenIds and the number of keys to mint
+    uint256 valueForKeys = isForKeys ? type(uint256).max : 0;
     for (uint256 i; i < _values.length; i++) {
-      // check if there is the comic not to be burned for the key
-      if (_values[i] != 0) {
-        // in case of the key should be minted, set the number of items to be minted
-        tokenNumbersForItems[i] = _values[i] - 1;
-      } else {
-        isAllComicsBurning = false;
+      if (isForKeys) { // burning comics for keys
+        // get the min value in _values
+        if (_values[i] < valueForKeys) valueForKeys = _values[i];
       }
 
-      // in case of the key should be minted, set tokenIds for items
+      // set tokenIds
       tokenIds[i] = i + 1;
+    }
+
+    // in case of the keys should be minted, set the number of items to be minted
+    if (valueForKeys != 0) {
+      for (uint256 i; i < _values.length; i++) {
+        tokenNumbersForItems[i] = _values[i] - valueForKeys;
+      }
     }
 
     // burn comics
     INiftyLaunchComics(comics).burnBatch(msg.sender, tokenIds, _values);
     emit ComicsBurned(msg.sender, tokenIds, _values);
 
-    // mint the key and items
-    if (isAllComicsBurning) {
+    // mint the keys and items
+    if (valueForKeys != 0) {
       // mint the key and items
-      INiftyKeys(keys).mint(msg.sender, 1, 1, "");
+      INiftyKeys(keys).mint(msg.sender, 1, valueForKeys, "");
       INiftyItems(items).mintBatch(msg.sender, tokenIds, tokenNumbersForItems, "");
 
-      emit KeyMinted(msg.sender, 1, 1);
+      emit KeyMinted(msg.sender, 1, valueForKeys);
       emit ItemMinted(msg.sender, tokenIds, tokenNumbersForItems);
     } else {
       // mint items
