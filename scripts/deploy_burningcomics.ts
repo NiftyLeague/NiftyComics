@@ -114,6 +114,7 @@ async function main() {
 
   // We get the contract to deploy
   const comicsAddress = process.env.COMICS_ADDRESS;
+  const burningStartAt = process.env.COMICS_BURNING_STARTAT
 
   const uriForNiftyItems = `https://api.nifty-league.com/${targetNetwork}/items/{id}`;
   const items = await deploy('NiftyItems', [uriForNiftyItems], 0);
@@ -121,7 +122,7 @@ async function main() {
   const uriForNiftyKeys = `https://api.nifty-league.com/${targetNetwork}/keys/{id}`;
   const keys = await deploy('NiftyKeys', [uriForNiftyKeys], 0);
 
-  const burningComics = await deploy('NiftyBurningComics', [comicsAddress, keys.address, items.address], 1);
+  const burningComics = await deploy('NiftyBurningComics', [comicsAddress, keys.address, items.address, burningStartAt], 1);
 
   // Verify the contracts
   await tenderlyVerify({
