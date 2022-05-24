@@ -1,50 +1,10 @@
 {
   "manifestVersion": "3.2",
   "admin": {
-    "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-    "txHash": "0x6b9fb07b5ae944cf4deda8b8573bf123c27781b844db8add45f4d033192b22b0"
+    "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+    "txHash": "0x7139d79dcdcdc7e44213e313aaddca0fbd90e67fb0c1ecb1f5e97bbdd4deb3d2"
   },
   "proxies": [
-    {
-      "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-      "txHash": "0x679648faae62167a198387cca440872662c7de2e50faabd3d12ae676692f89d1",
-      "kind": "transparent"
-    },
-    {
-      "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
-      "txHash": "0x271b9f3bb1cb80c0a5c4535fa28b3cdc0c873e5026b5dc68d53c804ff1b055e3",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
-      "txHash": "0xdbe3ba9adcb9c2b4166883e1a552c9435a31d7faa9c08f95b1b4bd643dc9ac81",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x7a2088a1bFc9d81c55368AE168C2C02570cB814F",
-      "txHash": "0x3559147f4f436de931b2f257fc94005cd5ea31671712d02bd735b4ec226cb30d",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
-      "txHash": "0x891b68561bbbebc3931a1583981194b0e87a99f957e7f16cc17326a962c69039",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
-      "txHash": "0x039a3cc3a33f41616631c51b340d4843527c5e45c4125d63cc763b3d62312a9b",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x36C02dA8a0983159322a80FFE9F24b1acfF8B570",
-      "txHash": "0x73ecb13fcc9cc31a1b6b15bfe4a01462c19e1354bc6ad15d9865bda08fcbdc3b",
-      "kind": "transparent"
-    },
-    {
-      "address": "0x2bdCC0de6bE1f7D2ee689a0342D76F52E8EFABa3",
-      "txHash": "0x4ffddc57746e694405a349b0d8b00ac38d085d554b621f2a19b936300a060fcb",
-      "kind": "transparent"
-    },
     {
       "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
       "txHash": "0xffd6ead58361a8c61b52a616ebf2195767e2bc927ed85d4968e201bb5d949ff4",
@@ -53,6 +13,96 @@
     {
       "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       "txHash": "0xb80d54de08f850ed11ef8a5bd4e77f2b8bd07356793b935a627cefecb879ba8b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x2bdCC0de6bE1f7D2ee689a0342D76F52E8EFABa3",
+      "txHash": "0xc685e7dde32ad9ee94a0b6ed8d98e4b6ff25d7404d200e8de5abe4919cdad9e5",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xBEc49fA140aCaA83533fB00A2BB19bDdd0290f25",
+      "txHash": "0x5dc47852ab5ca78893e7fdb79cc2467dab20bd248e88e4567b7c1d7357287db8",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4C2F7092C2aE51D986bEFEe378e50BD4dB99C901",
+      "txHash": "0x155cc79d6fea2a56718e740dcf39adc19a3b78a60efbd8a63708f2ccc7f6c921",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+      "txHash": "0xc8d47a85b7ffc416e77a1e63c31542a1dc7edb6bb143322b48be11d2380ca3ed",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      "txHash": "0xf72a3c67f8f9a5e940f6c32f7dac5451e087263a8edb7f9b12e3cb302be7e24f",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+      "txHash": "0x4cdf0995dea583c9c154c09dba53a025031b61159093e8894ec8a3dafe8f1b13",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
+      "txHash": "0x4dbca65efd2004506bc2b734ff29e17b683dbb76b5afa296d418528618c619d7",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x7a2088a1bFc9d81c55368AE168C2C02570cB814F",
+      "txHash": "0x6e78938edbb2b2dc964cdbe8b21fbd1b194d5b460c4cc66d069fa2bd146b0423",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
+      "txHash": "0x2f5b53d0a1196ad3645d04ee3312677ec18b333e32c6886e9bcdd80701ab1faf",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
+      "txHash": "0xc04146495190691174da8e4a7c7e024efb562a54d735e18c4344d63911b0b45f",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x36C02dA8a0983159322a80FFE9F24b1acfF8B570",
+      "txHash": "0x20520cc4051c913a8f3e96338af9257b34e3c02da153a376d69aa0f8debde906",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x82e01223d51Eb87e16A03E24687EDF0F294da6f1",
+      "txHash": "0xf8425cf9ea87e79accea1bb2c1657e61b1d5f6bd8054becb47f16b8c6371cc80",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f",
+      "txHash": "0x206e072c128f719ed8d7dc9b2c5b661dcb1bfff775d63b53bfa121659eaa0b1c",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x04C89607413713Ec9775E14b954286519d836FEf",
+      "txHash": "0x92535b85d298981f434e2a56c01b5966dbe62c7567b17f16fc00f4d235155011",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x36b58F5C1969B7b6591D752ea6F5486D069010AB",
+      "txHash": "0xbd1b33969c972aa073ec2479412cc07dba84895809331449d6b9badcad20bcc1",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xf4B146FbA71F41E0592668ffbF264F1D186b2Ca8",
+      "txHash": "0x1010214036951ec1f86717e827800fad289f32ea2db9f0d12749749d44a50199",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xD84379CEae14AA33C123Af12424A37803F885889",
+      "txHash": "0x82d862e36ae4858523afe7dc6665cb1cf761206e492270aeae9567c3a341caab",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9",
+      "txHash": "0x01410a8d7affe27b7ae245608f3cef33e09b9d8e2e1df93295f51846638e9906",
       "kind": "transparent"
     }
   ],
@@ -158,6 +208,153 @@
             "type": "t_address",
             "contract": "NiftyBurningComics",
             "src": "contracts/NiftyBurningComics.sol:24"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    },
+    "81d5de59c16036cf83c3c5bb284f6702bd55618652e74587a0f6b706b24117a3": {
+      "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      "txHash": "0x0d0f9a72f72272bf5d128da29c5d80c29b784b858a6c37a3ac5773a580595529",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "_status",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_uint256",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:38"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:74"
+          },
+          {
+            "label": "_paused",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_bool",
+            "contract": "PausableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "PausableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:102"
+          },
+          {
+            "label": "comics",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_address",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:18"
+          },
+          {
+            "label": "keys",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_address",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:21"
+          },
+          {
+            "label": "items",
+            "offset": 0,
+            "slot": "203",
+            "type": "t_address",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:24"
+          },
+          {
+            "label": "burningStartAt",
+            "offset": 0,
+            "slot": "204",
+            "type": "t_uint256",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:27"
+          },
+          {
+            "label": "burningEndAt",
+            "offset": 0,
+            "slot": "205",
+            "type": "t_uint256",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:30"
           }
         ],
         "types": {
