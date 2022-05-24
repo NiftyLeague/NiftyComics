@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { ethers, upgrades } from 'hardhat';
+import { ethers, upgrades, network } from 'hardhat';
 import { constants } from 'ethers';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
@@ -14,11 +14,26 @@ describe('NiftyBurningComics', function () {
   let keys: NiftyKeys;
   let items: NiftyItems;
   let burning: NiftyBurningComics;
-
+  
+  let burningStartAt: number;
   let comicsTokenAmounts: Array<number>;
+
+  const ONE_DAY = 3600 * 24;
+  const FOR_KEY_BURNING = ONE_DAY * 15;
 
   const toRole = (role: string) => {
     return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(role));
+  };
+
+  const getCurrentBlockTimestamp = async () => {
+    const blockNumber = await ethers.provider.getBlockNumber();
+    const block = await ethers.provider.getBlock(blockNumber);
+    return block.timestamp;
+  };
+
+  const increaseTime = async (sec: number) => {
+    await network.provider.send("evm_increaseTime", [sec]);
+    await network.provider.send("evm_mine");
   };
 
   beforeEach(async () => {
@@ -38,11 +53,13 @@ describe('NiftyBurningComics', function () {
     items = await NiftyItems.deploy('https://api.nifty-league.com/items/');
 
     // Deploy NiftyBurningComics contract
+    burningStartAt = await getCurrentBlockTimestamp();
     const NiftyBurningComics = await ethers.getContractFactory('NiftyBurningComics');
     burning = (await upgrades.deployProxy(NiftyBurningComics, [
       comics.address,
       keys.address,
       items.address,
+      burningStartAt
     ])) as NiftyBurningComics;
 
     // mint NiftyLaunchComics
@@ -58,12 +75,17 @@ describe('NiftyBurningComics', function () {
 
   describe('burnComics', () => {
     // test scenarios for burnComics
-    // 1: [0, 0, 1, 0, 0, 0]
-    // 2: [1, 0, 0, 0, 0, 1]
-    // 3: [1, 1, 1, 1, 1, 1]
-    // 4: [1, 2, 10, 4, 5, 10]
-    // 5: [1, 2, 0, 0, 0, 11] - revert: exceeded token amount
-    // 6: [1, 2, 0, 0, 0] - revert: invalid param length
+    // 1 (isForKey = false): [0, 0, 1, 0, 0, 0]
+    // 2 (isForKey = false): [1, 0, 0, 0, 0, 1]
+    // 3 (isForKey = false): [1, 1, 1, 1, 1, 1]
+    // 4 (isForKey = false): [3, 3, 10, 4, 5, 10]
+    // 5 (isForKey = true): [0, 0, 1, 0, 0, 0]
+    // 6 (isForKey = true): [1, 0, 0, 0, 0, 1]
+    // 7 (isForKey = true): [1, 1, 1, 1, 1, 1]
+    // 8 (isForKey = true): [3, 3, 10, 4, 5, 10]
+    // 9: [1, 2, 0, 0, 0, 11] - revert: exceeded token amount
+    // 10: [1, 2, 0, 0, 0] - revert: Invalid length
+    // 11: revert: Burning comics is not valid
 
     it('burnComics - scenario 1', async function () {
       const comicsTokenIds = [1, 2, 3, 4, 5, 6];
@@ -105,14 +127,14 @@ describe('NiftyBurningComics', function () {
 
       // check balance
       for (let i = 0; i < comicsTokenIds.length; i++) {
-        expect(await items.balanceOf(alice.address, comicsTokenIds[i])).to.equal(0);
+        expect(await items.balanceOf(alice.address, comicsTokenIds[i])).to.equal(comicsValues[i]);
       }
-      expect(await keys.balanceOf(alice.address, 1)).to.equal(1);
+      expect(await keys.balanceOf(alice.address, 1)).to.equal(0);
     });
 
     it('burnComics - scenario 4', async function () {
       const comicsTokenIds = [1, 2, 3, 4, 5, 6];
-      const comicsValues = [1, 2, 10, 4, 5, 10];
+      const comicsValues = [3, 3, 10, 4, 5, 10];
 
       // burn comics
       await comics.connect(alice).setApprovalForAll(burning.address, true);
@@ -120,12 +142,84 @@ describe('NiftyBurningComics', function () {
 
       // check balance
       for (let i = 0; i < comicsTokenIds.length; i++) {
-        expect(await items.balanceOf(alice.address, comicsTokenIds[i])).to.equal(comicsValues[i] - 1);
+        expect(await items.balanceOf(alice.address, comicsTokenIds[i])).to.equal(comicsValues[i]);
+      }
+      expect(await keys.balanceOf(alice.address, 1)).to.equal(0);
+    });
+
+    it('burnComics - scenario 5', async function () {
+      const comicsTokenIds = [1, 2, 3, 4, 5, 6];
+      const comicsValues = [0, 0, 1, 0, 0, 0];
+
+      // increase time
+      await increaseTime(FOR_KEY_BURNING);
+
+      // burn comics
+      await comics.connect(alice).setApprovalForAll(burning.address, true);
+      await burning.connect(alice).burnComics(comicsValues);
+
+      // check balance
+      for (let i = 0; i < comicsTokenIds.length; i++) {
+        expect(await items.balanceOf(alice.address, comicsTokenIds[i])).to.equal(comicsValues[i]);
+      }
+      expect(await keys.balanceOf(alice.address, 1)).to.equal(0);
+    });
+
+    it('burnComics - scenario 6', async function () {
+      const comicsTokenIds = [1, 2, 3, 4, 5, 6];
+      const comicsValues = [1, 0, 0, 0, 0, 1];
+
+      // increase time
+      await increaseTime(FOR_KEY_BURNING);
+
+      // burn comics
+      await comics.connect(alice).setApprovalForAll(burning.address, true);
+      await burning.connect(alice).burnComics(comicsValues);
+
+      // check balance
+      for (let i = 0; i < comicsTokenIds.length; i++) {
+        expect(await items.balanceOf(alice.address, comicsTokenIds[i])).to.equal(comicsValues[i]);
+      }
+      expect(await keys.balanceOf(alice.address, 1)).to.equal(0);
+    });
+
+    it('burnComics - scenario 7', async function () {
+      const comicsTokenIds = [1, 2, 3, 4, 5, 6];
+      const comicsValues = [1, 1, 1, 1, 1, 1];
+
+      // increase time
+      await increaseTime(FOR_KEY_BURNING);
+
+      // burn comics
+      await comics.connect(alice).setApprovalForAll(burning.address, true);
+      await burning.connect(alice).burnComics(comicsValues);
+
+      // check balance
+      for (let i = 0; i < comicsTokenIds.length; i++) {
+        expect(await items.balanceOf(alice.address, comicsTokenIds[i])).to.equal(0);
       }
       expect(await keys.balanceOf(alice.address, 1)).to.equal(1);
     });
 
-    it('burnComics - scenario 5 (revert)', async function () {
+    it('burnComics - scenario 8', async function () {
+      const comicsTokenIds = [1, 2, 3, 4, 5, 6];
+      const comicsValues = [3, 3, 10, 4, 5, 10];
+
+      // increase time
+      await increaseTime(FOR_KEY_BURNING);
+
+      // burn comics
+      await comics.connect(alice).setApprovalForAll(burning.address, true);
+      await burning.connect(alice).burnComics(comicsValues);
+
+      // check balance
+      for (let i = 0; i < comicsTokenIds.length; i++) {
+        expect(await items.balanceOf(alice.address, comicsTokenIds[i])).to.equal(comicsValues[i] - 3);
+      }
+      expect(await keys.balanceOf(alice.address, 1)).to.equal(3);
+    });
+
+    it('burnComics - scenario 9 (revert)', async function () {
       const comicsTokenIds = [1, 2, 3, 4, 5, 6];
       const comicsValues = [1, 2, 0, 0, 0, 11];
 
@@ -136,13 +230,38 @@ describe('NiftyBurningComics', function () {
       );
     });
 
-    it('burnComics - scenario 6 (revert)', async function () {
+    it('burnComics - scenario 10 (revert)', async function () {
       const comicsTokenIds = [1, 2, 3, 4, 5, 6];
       const comicsValues = [1, 2, 0, 0, 0];
 
       // burn comics
       await comics.connect(alice).setApprovalForAll(burning.address, true);
       await expect(burning.connect(alice).burnComics(comicsValues)).to.be.revertedWith('Invalid length');
+    });
+
+    it('burnComics - scenario 11 (revert)', async function () {
+      const comicsTokenIds = [1, 2, 3, 4, 5, 6];
+      const comicsValues = [1, 2, 0, 0, 0, 0];
+
+      // deploy new NiftyBurningComics contract with new burningStartAt
+      const newNiftyBurningComics = await ethers.getContractFactory('NiftyBurningComics');
+      const newBurning = (await upgrades.deployProxy(newNiftyBurningComics, [
+        comics.address,
+        keys.address,
+        items.address,
+        burningStartAt + ONE_DAY
+      ])) as NiftyBurningComics;
+
+      // burn comics
+      await comics.connect(alice).setApprovalForAll(burning.address, true);
+      await expect(newBurning.connect(alice).burnComics(comicsValues)).to.be.revertedWith('Burning comics is not valid');
+
+      // increase time
+      await increaseTime(ONE_DAY * 31);
+
+      // burn comics
+      await comics.connect(alice).setApprovalForAll(burning.address, true);
+      await expect(newBurning.connect(alice).burnComics(comicsValues)).to.be.revertedWith('Burning comics is not valid');
     });
   });
 
