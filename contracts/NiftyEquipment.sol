@@ -21,22 +21,25 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-contract NiftyKeys is Context, AccessControl, ERC1155, Pausable {
+contract NiftyEquipment is Context, AccessControl, ERC1155, Pausable {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-  string public name = "Nifty Keys";
-  string public symbol = "NLK";
+  string public name;
+  string public symbol;
 
   /**
    * @dev Grants `DEFAULT_ADMIN_ROLE`, `MINTER_ROLE`, and `PAUSER_ROLE` to the account that
    * deploys the contract.
    */
-  constructor(string memory uri) ERC1155(uri) {
+  constructor(string memory _name, string memory _symbol, string memory _uri) ERC1155(_uri) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
     _setupRole(MINTER_ROLE, _msgSender());
     _setupRole(PAUSER_ROLE, _msgSender());
+
+    name = _name;
+    symbol = _symbol;
   }
 
   /**
@@ -144,7 +147,7 @@ contract NiftyKeys is Context, AccessControl, ERC1155, Pausable {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view override(AccessControl, ERC1155) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC1155) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }
