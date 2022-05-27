@@ -73,7 +73,7 @@ const deploy = async (contractName: string, _args: unknown[] = [], contractType:
   let extraGasInfo = '';
   if (deployedContract && deployedContract.deployTransaction) {
     // wait for 5 confirmations for byte data to populate
-    await deployedContract.deployTransaction.wait(5);
+    await deployedContract.deployTransaction.wait(2);
     const gasUsed = deployedContract.deployTransaction.gasLimit.mul(
       deployedContract.deployTransaction.gasPrice as BigNumber,
       );
@@ -114,30 +114,30 @@ async function main() {
 
   // We get the contract to deploy
   const comicsAddress = process.env.COMICS_ADDRESS;
-  const burningStartAt = process.env.COMICS_BURNING_STARTAT
+  const comicsBurningStartAt = process.env.COMICS_BURNING_STARTAT
 
   const uriForNiftyItems = `https://api.nifty-league.com/${targetNetwork}/items/{id}`;
-  const items = await deploy('NiftyItems', [uriForNiftyItems], 0);
+  const items = await deploy('NiftyEquipment', ['Nifty Items', 'NLT', uriForNiftyItems], 0);
 
   const uriForNiftyKeys = `https://api.nifty-league.com/${targetNetwork}/keys/{id}`;
-  const keys = await deploy('NiftyKeys', [uriForNiftyKeys], 0);
+  const keys = await deploy('NiftyEquipment', ['Nifty Keys', 'NLK', uriForNiftyKeys], 0);
 
-  const burningComics = await deploy('NiftyBurningComics', [comicsAddress, keys.address, items.address, burningStartAt], 1);
+  const burningComics = await deploy('NiftyBurningComics', [comicsAddress, keys.address, items.address, comicsBurningStartAt], 1);
 
   // Verify the contracts
   await tenderlyVerify({
-    contractName: 'NiftyItems',
+    contractName: 'NiftyEquipment',
     contractAddress: items.address,
   });
   console.log(chalk.blue(` 📁 Attempting etherscan verification of ${items.address} on ${targetNetwork}`));
-  await run('verify:verify', { address: items.address, constructorArguments: [uriForNiftyItems], contract: "contracts/NiftyItems.sol:NiftyItems" });
+  await run('verify:verify', { address: items.address, constructorArguments: ['Nifty Items', 'NLT', uriForNiftyItems], contract: "contracts/NiftyEquipment.sol:NiftyEquipment" });
 
-  await tenderlyVerify({
-    contractName: 'NiftyKeys',
-    contractAddress: keys.address,
-  });
-  console.log(chalk.blue(` 📁 Attempting etherscan verification of ${keys.address} on ${targetNetwork}`));
-  await run('verify:verify', { address: keys.address, constructorArguments: [uriForNiftyKeys], contract: "contracts/NiftyKeys.sol:NiftyKeys" });
+  // await tenderlyVerify({
+  //   contractName: 'NiftyKeys',
+  //   contractAddress: keys.address,
+  // });
+  // console.log(chalk.blue(` 📁 Attempting etherscan verification of ${keys.address} on ${targetNetwork}`));
+  // await run('verify:verify', { address: keys.address, constructorArguments: ['Nifty Keys', 'NLK', uriForNiftyKeys], contract: "contracts/NiftyEquipment.sol:NiftyEquipment" });
 
   const burningComicsImpl = await (await upgrades.admin.getInstance()).getProxyImplementation(burningComics.address);
   await tenderlyVerify({
