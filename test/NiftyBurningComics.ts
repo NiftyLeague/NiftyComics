@@ -3,7 +3,7 @@ import { ethers, upgrades, network } from 'hardhat';
 import { constants } from 'ethers';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
-import type { NiftyLaunchComics, NiftyKeys, NiftyItems, NiftyBurningComics } from '../typechain';
+import type { NiftyLaunchComics, NiftyEquipment, NiftyBurningComics } from '../typechain';
 
 describe('NiftyBurningComics', function () {
   let accounts: SignerWithAddress[];
@@ -11,11 +11,11 @@ describe('NiftyBurningComics', function () {
   let alice: SignerWithAddress;
   let bob: SignerWithAddress;
   let comics: NiftyLaunchComics;
-  let keys: NiftyKeys;
-  let items: NiftyItems;
+  let keys: NiftyEquipment;
+  let items: NiftyEquipment;
   let burning: NiftyBurningComics;
   
-  let burningStartAt: number;
+  let comicsBurningStartAt: number;
   let comicsTokenAmounts: Array<number>;
 
   const ONE_DAY = 3600 * 24;
@@ -45,21 +45,21 @@ describe('NiftyBurningComics', function () {
     comics = await NiftyLaunchComics.deploy('https://api.nifty-league.com/launch-comics/');
 
     // Deploy NiftyKeys contract
-    const NiftyKeys = await ethers.getContractFactory('NiftyKeys');
-    keys = await NiftyKeys.deploy('https://api.nifty-league.com/keys/');
+    const NiftyKeys = await ethers.getContractFactory('NiftyEquipment');
+    keys = await NiftyKeys.deploy('Nifty Keys', 'NLK', 'https://api.nifty-league.com/keys/');
 
     // Deploy NiftyItems contract
-    const NiftyItems = await ethers.getContractFactory('NiftyItems');
-    items = await NiftyItems.deploy('https://api.nifty-league.com/items/');
+    const NiftyItems = await ethers.getContractFactory('NiftyEquipment');
+    items = await NiftyItems.deploy('Nifty Items', 'NLT', 'https://api.nifty-league.com/items/');
 
     // Deploy NiftyBurningComics contract
-    burningStartAt = await getCurrentBlockTimestamp();
+    comicsBurningStartAt = await getCurrentBlockTimestamp();
     const NiftyBurningComics = await ethers.getContractFactory('NiftyBurningComics');
     burning = (await upgrades.deployProxy(NiftyBurningComics, [
       comics.address,
       keys.address,
       items.address,
-      burningStartAt
+      comicsBurningStartAt
     ])) as NiftyBurningComics;
 
     // mint NiftyLaunchComics
@@ -243,13 +243,13 @@ describe('NiftyBurningComics', function () {
       const comicsTokenIds = [1, 2, 3, 4, 5, 6];
       const comicsValues = [1, 2, 0, 0, 0, 0];
 
-      // deploy new NiftyBurningComics contract with new burningStartAt
+      // deploy new NiftyBurningComics contract with new comicsBurningStartAt
       const newNiftyBurningComics = await ethers.getContractFactory('NiftyBurningComics');
       const newBurning = (await upgrades.deployProxy(newNiftyBurningComics, [
         comics.address,
         keys.address,
         items.address,
-        burningStartAt + ONE_DAY
+        comicsBurningStartAt + ONE_DAY
       ])) as NiftyBurningComics;
 
       // burn comics
