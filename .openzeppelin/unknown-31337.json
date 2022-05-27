@@ -2,7 +2,7 @@
   "manifestVersion": "3.2",
   "admin": {
     "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-    "txHash": "0x7139d79dcdcdc7e44213e313aaddca0fbd90e67fb0c1ecb1f5e97bbdd4deb3d2"
+    "txHash": "0x79eca4e9bc8c4e9eecc2f07cdc48b5636ac58092898d708a7b8151169b4cdceb"
   },
   "proxies": [
     {
@@ -37,72 +37,72 @@
     },
     {
       "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-      "txHash": "0xf72a3c67f8f9a5e940f6c32f7dac5451e087263a8edb7f9b12e3cb302be7e24f",
+      "txHash": "0xba52f4149cc99f5b3fcadbdfd56d0ca7b6d390debd42b6c3d4082c52cf586e8e",
       "kind": "transparent"
     },
     {
       "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
-      "txHash": "0x4cdf0995dea583c9c154c09dba53a025031b61159093e8894ec8a3dafe8f1b13",
+      "txHash": "0x198dd0b930be503593c6589b789915f2e71b9b3ad5e894c39f826b2b9f7835c5",
       "kind": "transparent"
     },
     {
       "address": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
-      "txHash": "0x4dbca65efd2004506bc2b734ff29e17b683dbb76b5afa296d418528618c619d7",
+      "txHash": "0x77a6928b8bf3201c86b220a377f4917476760752a706756bd84ced7209b0982e",
       "kind": "transparent"
     },
     {
       "address": "0x7a2088a1bFc9d81c55368AE168C2C02570cB814F",
-      "txHash": "0x6e78938edbb2b2dc964cdbe8b21fbd1b194d5b460c4cc66d069fa2bd146b0423",
+      "txHash": "0xb2f540708374f74e5ae49f3660132157896320b582669c3e4d3ade922cbb653d",
       "kind": "transparent"
     },
     {
       "address": "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
-      "txHash": "0x2f5b53d0a1196ad3645d04ee3312677ec18b333e32c6886e9bcdd80701ab1faf",
+      "txHash": "0x46aae7c7bf182055bfc6ad496b28911b1533093e65a5af4605d705771584ed7a",
       "kind": "transparent"
     },
     {
       "address": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
-      "txHash": "0xc04146495190691174da8e4a7c7e024efb562a54d735e18c4344d63911b0b45f",
+      "txHash": "0xf2e8c4a23c11fb37453f179a3ff58074a3732c19d6c8db69cf8fb40c3b852b2a",
       "kind": "transparent"
     },
     {
       "address": "0x36C02dA8a0983159322a80FFE9F24b1acfF8B570",
-      "txHash": "0x20520cc4051c913a8f3e96338af9257b34e3c02da153a376d69aa0f8debde906",
+      "txHash": "0x8401ded49d8f8131d41a6a4c1a078b62686f4fd5870ca8fe0a79c1d6e51ee539",
       "kind": "transparent"
     },
     {
       "address": "0x82e01223d51Eb87e16A03E24687EDF0F294da6f1",
-      "txHash": "0xf8425cf9ea87e79accea1bb2c1657e61b1d5f6bd8054becb47f16b8c6371cc80",
+      "txHash": "0xb29a5b4c9f883afbc551d35c83c309a16390afb6f402b8988cfaa1ebb7996d21",
       "kind": "transparent"
     },
     {
       "address": "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f",
-      "txHash": "0x206e072c128f719ed8d7dc9b2c5b661dcb1bfff775d63b53bfa121659eaa0b1c",
+      "txHash": "0xfd0c115f957d5185be7377774428bae5154acfe1e26333f71ec78a024e701196",
       "kind": "transparent"
     },
     {
       "address": "0x04C89607413713Ec9775E14b954286519d836FEf",
-      "txHash": "0x92535b85d298981f434e2a56c01b5966dbe62c7567b17f16fc00f4d235155011",
+      "txHash": "0x45f6275f5c1809f9103f38fd9d29bb1846ba6271b8b99af17e80e53b7dae9a24",
       "kind": "transparent"
     },
     {
       "address": "0x36b58F5C1969B7b6591D752ea6F5486D069010AB",
-      "txHash": "0xbd1b33969c972aa073ec2479412cc07dba84895809331449d6b9badcad20bcc1",
+      "txHash": "0xd43d86116a9ace969ce2c0a8c450b188324541410ef9260adcca64a4646c7f7d",
       "kind": "transparent"
     },
     {
       "address": "0xf4B146FbA71F41E0592668ffbF264F1D186b2Ca8",
-      "txHash": "0x1010214036951ec1f86717e827800fad289f32ea2db9f0d12749749d44a50199",
+      "txHash": "0xc58b11babacfc5b0f193b5b909b576cb10602cbbcea5e621e3285d6e0b4f1f27",
       "kind": "transparent"
     },
     {
       "address": "0xD84379CEae14AA33C123Af12424A37803F885889",
-      "txHash": "0x82d862e36ae4858523afe7dc6665cb1cf761206e492270aeae9567c3a341caab",
+      "txHash": "0x4942b1025596a26492a1b170abd1cb878e3b6e32d49da431b67665e7b6bc82ec",
       "kind": "transparent"
     },
     {
       "address": "0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9",
-      "txHash": "0x01410a8d7affe27b7ae245608f3cef33e09b9d8e2e1df93295f51846638e9906",
+      "txHash": "0x2a2586324f7f7e55eb8a3a84ce233743af86e120a74c16f922d7d07f6903ac5c",
       "kind": "transparent"
     }
   ],
@@ -238,9 +238,9 @@
         }
       }
     },
-    "81d5de59c16036cf83c3c5bb284f6702bd55618652e74587a0f6b706b24117a3": {
+    "202405d179efd80ccec9e11aa52078f145c3899397e3c479b3b55559284a3f87": {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0x0d0f9a72f72272bf5d128da29c5d80c29b784b858a6c37a3ac5773a580595529",
+      "txHash": "0x75d1f59b55d58269f51b60a7f258f159b440c60a89e5854b40c99d00fd8d2a8c",
       "layout": {
         "storage": [
           {
@@ -341,7 +341,7 @@
             "src": "contracts/NiftyBurningComics.sol:24"
           },
           {
-            "label": "burningStartAt",
+            "label": "comicsBurningStartAt",
             "offset": 0,
             "slot": "204",
             "type": "t_uint256",
@@ -349,12 +349,20 @@
             "src": "contracts/NiftyBurningComics.sol:27"
           },
           {
-            "label": "burningEndAt",
+            "label": "mintNiftyKeysStartAt",
             "offset": 0,
             "slot": "205",
             "type": "t_uint256",
             "contract": "NiftyBurningComics",
             "src": "contracts/NiftyBurningComics.sol:30"
+          },
+          {
+            "label": "comicsBurningEndAt",
+            "offset": 0,
+            "slot": "206",
+            "type": "t_uint256",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:33"
           }
         ],
         "types": {

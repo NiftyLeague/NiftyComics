@@ -89,6 +89,36 @@
       "address": "0x18D57cbDafCEe2Fa728F8F7f36770F711e1AD34d",
       "txHash": "0xf4559872dfad8eaac53f0e0a7cef051bc77721f4b76383b54f639bcfa8d9ef9f",
       "kind": "transparent"
+    },
+    {
+      "address": "0xB53b7Ce57807e8599055088e70B26D2A53b01418",
+      "txHash": "0x0e388379eb7d726c9a1ca86dac211c9d24707cd75a7a94d7b0f8e3d7ffddf656",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x103FB175F7e738ab61A08008c70599477d170299",
+      "txHash": "0x14b537ba6c87f15993bf1abbae11954003526b5fc9a4601acd81dc65147afde0",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xA7F4b49e26d7Dfc770e359902D82903737A2BDae",
+      "txHash": "0xabbb49cfa72a2ab1b9418a31659d4185bb475c57651b84888fcb6452a175b43b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x96A05f2Bf87aeA5829FB22Bb2ABf9daE3ffc7D40",
+      "txHash": "0x72164e999d7d2c4c6939fc8b5d924c0ae64818cfb5b08a8c1c8b5943b1e9084b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x6c1204A0F68f2368874C23E1aa47bcc7b4a3155d",
+      "txHash": "0xf3af695dff3f37af46ee53c8bbc565b982dfeb79f7ed6839058e2925f08a90b5",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x2384B6498Fe25d0A1F7d6Bdc84E21494DB81962b",
+      "txHash": "0x49eb7063478cce7a5487798bdde2597d80dcd7f840ee770d8ae9eae13d8f65cc",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -326,7 +356,7 @@
             "src": "contracts/NiftyBurningComics.sol:24"
           },
           {
-            "label": "burningStartAt",
+            "label": "comicsBurningStartAt",
             "offset": 0,
             "slot": "204",
             "type": "t_uint256",
@@ -334,12 +364,167 @@
             "src": "contracts/NiftyBurningComics.sol:27"
           },
           {
-            "label": "burningEndAt",
+            "label": "comicsBurningEndAt",
             "offset": 0,
             "slot": "205",
             "type": "t_uint256",
             "contract": "NiftyBurningComics",
             "src": "contracts/NiftyBurningComics.sol:30"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    },
+    "202405d179efd80ccec9e11aa52078f145c3899397e3c479b3b55559284a3f87": {
+      "address": "0x072622ec630Fa9BE712Ee82c1bC4B84D61b9cAd0",
+      "txHash": "0xb35f0e72e5e66dd640c3ec70ec9d714f2ffa80fbeafb232c9fb2655003249120",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "_status",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_uint256",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:38"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:74"
+          },
+          {
+            "label": "_paused",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_bool",
+            "contract": "PausableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "PausableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:102"
+          },
+          {
+            "label": "comics",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_address",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:18"
+          },
+          {
+            "label": "keys",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_address",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:21"
+          },
+          {
+            "label": "items",
+            "offset": 0,
+            "slot": "203",
+            "type": "t_address",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:24"
+          },
+          {
+            "label": "comicsBurningStartAt",
+            "offset": 0,
+            "slot": "204",
+            "type": "t_uint256",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:27"
+          },
+          {
+            "label": "mintNiftyKeysStartAt",
+            "offset": 0,
+            "slot": "205",
+            "type": "t_uint256",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:30"
+          },
+          {
+            "label": "comicsBurningEndAt",
+            "offset": 0,
+            "slot": "206",
+            "type": "t_uint256",
+            "contract": "NiftyBurningComics",
+            "src": "contracts/NiftyBurningComics.sol:33"
           }
         ],
         "types": {

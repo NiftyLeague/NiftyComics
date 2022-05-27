@@ -23,17 +23,20 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
   /// @dev NiftyItems address
   address public items;
 
-  /// @dev NiftyBurningComics contract start time
-  uint256 public burningStartAt;
+  /// @dev NiftyLaunchComics burning start time
+  uint256 public comicsBurningStartAt;
 
-  /// @dev NiftyBurningComics contract end time
-  uint256 public burningEndAt;
+  /// @dev NiftyKeys mint start time
+  uint256 public mintNiftyKeysStartAt;
+
+  /// @dev NiftyLaunchComics burning end time
+  uint256 public comicsBurningEndAt;
 
   function initialize(
     address _comics,
     address _keys,
     address _items,
-    uint256 _burningStartAt
+    uint256 _comicsBurningStartAt
   ) public initializer {
     __Ownable_init();
     __ReentrancyGuard_init();
@@ -42,8 +45,9 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
     comics = _comics;
     keys = _keys;
     items = _items;
-    burningStartAt = _burningStartAt;
-    burningEndAt = _burningStartAt + 3600 * 24 * 30;  // 30 days period
+    comicsBurningStartAt = _comicsBurningStartAt;
+    mintNiftyKeysStartAt = _comicsBurningStartAt + 3600 * 24 * 15;  // 15 days period
+    comicsBurningEndAt = _comicsBurningStartAt + 3600 * 24 * 30;  // 30 days period
   }
 
   /**
@@ -55,7 +59,7 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
    */
   function burnComics(uint256[] memory _values) external nonReentrant whenNotPaused {
     // check if burning comics is valid
-    require(burningStartAt <= block.timestamp && block.timestamp <= burningEndAt, "Burning comics is not valid");
+    require(comicsBurningStartAt <= block.timestamp && block.timestamp <= comicsBurningEndAt, "Burning comics is not valid");
 
     // check _values param
     require(_values.length == 6, "Invalid length");
@@ -64,7 +68,7 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
     uint256[] memory tokenIds = new uint256[](6);
     uint256[] memory tokenNumbersForItems = new uint256[](6);
 
-    bool isForKeys = (burningStartAt + 3600 * 24 * 15) < block.timestamp;
+    bool isForKeys = mintNiftyKeysStartAt < block.timestamp;
 
     // get tokenIds and the number of keys to mint
     uint256 valueForKeys = isForKeys ? type(uint256).max : 0;
