@@ -2,7 +2,14 @@
 
 pragma solidity ^0.8.0;
 
-interface INiftyKeys {
+interface INiftyEquipment {
+  function mintBatch(
+    address to,
+    uint256[] memory ids,
+    uint256[] memory amounts,
+    bytes memory data
+  ) external;
+
   function mint(
     address to,
     uint256 id,
