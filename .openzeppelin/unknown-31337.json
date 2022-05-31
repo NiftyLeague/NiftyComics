@@ -2,7 +2,7 @@
   "manifestVersion": "3.2",
   "admin": {
     "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-    "txHash": "0x79eca4e9bc8c4e9eecc2f07cdc48b5636ac58092898d708a7b8151169b4cdceb"
+    "txHash": "0x329e83792c7f429b85d1763c4f2ecc6fa656a9fab8d8785c12b8ec9bd8aece92"
   },
   "proxies": [
     {
@@ -37,72 +37,72 @@
     },
     {
       "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-      "txHash": "0xba52f4149cc99f5b3fcadbdfd56d0ca7b6d390debd42b6c3d4082c52cf586e8e",
+      "txHash": "0x3c805f52f7404fbc5bce812c754944f0c163393b3242b617e4b6ba0bdbbb4e07",
       "kind": "transparent"
     },
     {
       "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
-      "txHash": "0x198dd0b930be503593c6589b789915f2e71b9b3ad5e894c39f826b2b9f7835c5",
+      "txHash": "0x90fae8fe4f7262506c540aeed204debcde4a8475b5fc8fbb38692f7a35634953",
       "kind": "transparent"
     },
     {
       "address": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
-      "txHash": "0x77a6928b8bf3201c86b220a377f4917476760752a706756bd84ced7209b0982e",
+      "txHash": "0xd5ffd5bde4856bc3d0e6e93fe150cbff6c1c01305a0d0daafea394fa8cdd7c31",
       "kind": "transparent"
     },
     {
       "address": "0x7a2088a1bFc9d81c55368AE168C2C02570cB814F",
-      "txHash": "0xb2f540708374f74e5ae49f3660132157896320b582669c3e4d3ade922cbb653d",
+      "txHash": "0x4f7ba6c5b34e2c8023f5a98d50cad81530dc4213210040ea5e16412cbe97cab5",
       "kind": "transparent"
     },
     {
       "address": "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
-      "txHash": "0x46aae7c7bf182055bfc6ad496b28911b1533093e65a5af4605d705771584ed7a",
+      "txHash": "0x3a8628a8aedbc39f67e33084ed552713e007510c3f8db159897425727dce9d86",
       "kind": "transparent"
     },
     {
       "address": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
-      "txHash": "0xf2e8c4a23c11fb37453f179a3ff58074a3732c19d6c8db69cf8fb40c3b852b2a",
+      "txHash": "0x800c7a3bef362ba41552b602c5ca95cd0310f1a1964da958e60da0f644cc36f5",
       "kind": "transparent"
     },
     {
       "address": "0x36C02dA8a0983159322a80FFE9F24b1acfF8B570",
-      "txHash": "0x8401ded49d8f8131d41a6a4c1a078b62686f4fd5870ca8fe0a79c1d6e51ee539",
+      "txHash": "0x0e24ac35809f1b923168da0c81ffa142712e46c6ecef4b13c3fb31260b8866d6",
       "kind": "transparent"
     },
     {
       "address": "0x82e01223d51Eb87e16A03E24687EDF0F294da6f1",
-      "txHash": "0xb29a5b4c9f883afbc551d35c83c309a16390afb6f402b8988cfaa1ebb7996d21",
+      "txHash": "0x4939e40db3419855f06eabc3254cc1c5ab997005218e79fc7bb80bc304143d9c",
       "kind": "transparent"
     },
     {
       "address": "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f",
-      "txHash": "0xfd0c115f957d5185be7377774428bae5154acfe1e26333f71ec78a024e701196",
+      "txHash": "0x9183575a9afa870c96f3331f8d1c7bcd957d532fc37efe74d3002fb3ae71bd35",
       "kind": "transparent"
     },
     {
       "address": "0x04C89607413713Ec9775E14b954286519d836FEf",
-      "txHash": "0x45f6275f5c1809f9103f38fd9d29bb1846ba6271b8b99af17e80e53b7dae9a24",
+      "txHash": "0xa136267a9ae50b73d8b82ac450b0975ea7e0f8e711c65351d40e3033eb3b2ac1",
       "kind": "transparent"
     },
     {
       "address": "0x36b58F5C1969B7b6591D752ea6F5486D069010AB",
-      "txHash": "0xd43d86116a9ace969ce2c0a8c450b188324541410ef9260adcca64a4646c7f7d",
+      "txHash": "0x9a24d8fced1b055de449b3e906c12f842f1ef37b7d9e354ae28c83564410d4f1",
       "kind": "transparent"
     },
     {
       "address": "0xf4B146FbA71F41E0592668ffbF264F1D186b2Ca8",
-      "txHash": "0xc58b11babacfc5b0f193b5b909b576cb10602cbbcea5e621e3285d6e0b4f1f27",
+      "txHash": "0x13c325f64b552b1953b0c04ee2ec53dfd172c7e7426f25fc9877122c0eaef940",
       "kind": "transparent"
     },
     {
       "address": "0xD84379CEae14AA33C123Af12424A37803F885889",
-      "txHash": "0x4942b1025596a26492a1b170abd1cb878e3b6e32d49da431b67665e7b6bc82ec",
+      "txHash": "0x1b0855494e521278d9739f8876e7024fbbfb8973fd84a65e0c0ad5993c9b32fc",
       "kind": "transparent"
     },
     {
       "address": "0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9",
-      "txHash": "0x2a2586324f7f7e55eb8a3a84ce233743af86e120a74c16f922d7d07f6903ac5c",
+      "txHash": "0xe556a800ec3a1c624865d98b0c91b8fd91579c0b3a23e13c83953c3eed7e93e3",
       "kind": "transparent"
     }
   ],
@@ -238,9 +238,9 @@
         }
       }
     },
-    "202405d179efd80ccec9e11aa52078f145c3899397e3c479b3b55559284a3f87": {
+    "d25cc0215814d10f35f1cfe0de8230abea440e85d5b4a37e039f07b98faf900a": {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0x75d1f59b55d58269f51b60a7f258f159b440c60a89e5854b40c99d00fd8d2a8c",
+      "txHash": "0x75a90267b8a69517070557b5ddaf1aa9d1d2aaa7ef152922ab024859ab8c8041",
       "layout": {
         "storage": [
           {
@@ -322,7 +322,7 @@
             "slot": "201",
             "type": "t_address",
             "contract": "NiftyBurningComics",
-            "src": "contracts/NiftyBurningComics.sol:18"
+            "src": "contracts/NiftyBurningComics.sol:17"
           },
           {
             "label": "keys",
@@ -330,7 +330,7 @@
             "slot": "202",
             "type": "t_address",
             "contract": "NiftyBurningComics",
-            "src": "contracts/NiftyBurningComics.sol:21"
+            "src": "contracts/NiftyBurningComics.sol:20"
           },
           {
             "label": "items",
@@ -338,7 +338,7 @@
             "slot": "203",
             "type": "t_address",
             "contract": "NiftyBurningComics",
-            "src": "contracts/NiftyBurningComics.sol:24"
+            "src": "contracts/NiftyBurningComics.sol:23"
           },
           {
             "label": "comicsBurningStartAt",
@@ -346,7 +346,7 @@
             "slot": "204",
             "type": "t_uint256",
             "contract": "NiftyBurningComics",
-            "src": "contracts/NiftyBurningComics.sol:27"
+            "src": "contracts/NiftyBurningComics.sol:26"
           },
           {
             "label": "mintNiftyKeysStartAt",
@@ -354,7 +354,7 @@
             "slot": "205",
             "type": "t_uint256",
             "contract": "NiftyBurningComics",
-            "src": "contracts/NiftyBurningComics.sol:30"
+            "src": "contracts/NiftyBurningComics.sol:29"
           },
           {
             "label": "comicsBurningEndAt",
@@ -362,7 +362,7 @@
             "slot": "206",
             "type": "t_uint256",
             "contract": "NiftyBurningComics",
-            "src": "contracts/NiftyBurningComics.sol:33"
+            "src": "contracts/NiftyBurningComics.sol:32"
           }
         ],
         "types": {

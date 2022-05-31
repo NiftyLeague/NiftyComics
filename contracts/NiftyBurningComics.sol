@@ -6,8 +6,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "./interfaces/INiftyLaunchComics.sol";
-import "./interfaces/INiftyKeys.sol";
-import "./interfaces/INiftyItems.sol";
+import "./interfaces/INiftyEquipment.sol";
 
 contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable {
   event ComicsBurned(address indexed by, uint256[] tokenIds, uint256[] values);
@@ -40,7 +39,7 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
   ) public initializer {
     __Ownable_init();
     __ReentrancyGuard_init();
-    __ReentrancyGuard_init();
+    __Pausable_init();
 
     comics = _comics;
     keys = _keys;
@@ -57,7 +56,7 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
    * @dev Key should be minted only for the last 15 days out of 30 days
    * @param _values Number of comics to burn, nth value means the number of nth comics(tokenId = n) to burn
    */
-  function burnComics(uint256[] memory _values) external nonReentrant whenNotPaused {
+  function burnComics(uint256[] calldata _values) external nonReentrant whenNotPaused {
     // check if burning comics is valid
     require(comicsBurningStartAt <= block.timestamp && block.timestamp <= comicsBurningEndAt, "Burning comics is not valid");
 
@@ -96,14 +95,14 @@ contract NiftyBurningComics is OwnableUpgradeable, ReentrancyGuardUpgradeable, P
     // mint the keys and items
     if (valueForKeys != 0) {
       // mint the key and items
-      INiftyKeys(keys).mint(msg.sender, 1, valueForKeys, "");
-      INiftyItems(items).mintBatch(msg.sender, tokenIds, tokenNumbersForItems, "");
+      INiftyEquipment(keys).mint(msg.sender, 1, valueForKeys, "");
+      INiftyEquipment(items).mintBatch(msg.sender, tokenIds, tokenNumbersForItems, "");
 
       emit KeyMinted(msg.sender, 1, valueForKeys);
       emit ItemMinted(msg.sender, tokenIds, tokenNumbersForItems);
     } else {
       // mint items
-      INiftyItems(items).mintBatch(msg.sender, tokenIds, _values, "");
+      INiftyEquipment(items).mintBatch(msg.sender, tokenIds, _values, "");
 
       emit ItemMinted(msg.sender, tokenIds, _values);
     }
