@@ -8,10 +8,10 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "./interfaces/IERC1155SupplyUpgradeable.sol";
-import "./interfaces/IERC20BurnableUpgradeable.sol";
+import "./interfaces/IERC20PresetMinterPauserUpgradeable.sol";
 import "./interfaces/INiftyEquipment.sol";
 
-contract NiftySale is OwnableUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable {
+contract NiftyItemSale is OwnableUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable {
   using SafeERC20Upgradeable for IERC20Upgradeable;
 
   event ItemPurchased(address indexed by, uint256[] itemIds, uint256[] amounts);
@@ -80,12 +80,12 @@ contract NiftySale is OwnableUpgradeable, ReentrancyGuardUpgradeable, PausableUp
    * @param _amounts Item amount list
    */
   function purchaseItems(uint256[] calldata _itemIds, uint256[] calldata _amounts) external nonReentrant whenNotPaused {
-    require(_itemIds.length == _amounts.length, "Invalid params");
+    require(_itemIds.length == _amounts.length, "Mismatched params");
 
     // get total price
     uint256 totalPrice;
     for (uint256 i; i < _itemIds.length; i++) {
-      require(_itemIds[i] > 6, "ID should be greater than 6");
+      require(_itemIds[i] > 6, "Token ID less than 7");
       require(itemPrices[_itemIds[i]] > 0, "Zero price");
       require(IERC1155SupplyUpgradeable(items).totalSupply(_itemIds[i]) + _amounts[i] <= itemMaxCounts[_itemIds[i]], "Max count overflow");
 
@@ -108,11 +108,12 @@ contract NiftySale is OwnableUpgradeable, ReentrancyGuardUpgradeable, PausableUp
    * @param _nftlAmounts Item price list specified by the NFTL token amounts
    */
   function setItemPrices(uint256[] calldata _itemIds, uint256[] calldata _nftlAmounts) external onlyOwner {
-    require(_itemIds.length == _nftlAmounts.length, "Invalid params");
+    require(_itemIds.length == _nftlAmounts.length, "Mismatched params");
 
     // set the item price
     for (uint256 i; i < _itemIds.length; i++) {
-      require(_nftlAmounts[i] >= 10**18, "Price smaller than 1 NFTL");
+      require(_itemIds[i] > 6, "Token ID less than 7");
+      require(_nftlAmounts[i] >= 10**18, "Price less than 1 NFTL");
       
       emit ItemPriceSet(msg.sender, _itemIds[i], itemPrices[_itemIds[i]], _nftlAmounts[i]);
 
@@ -129,7 +130,7 @@ contract NiftySale is OwnableUpgradeable, ReentrancyGuardUpgradeable, PausableUp
    * @param _maxCounts Item max count list
    */
   function setItemMaxCounts(uint256[] calldata _itemIds, uint256[] calldata _maxCounts) external onlyOwner {
-    require(_itemIds.length == _maxCounts.length, "Invalid params");
+    require(_itemIds.length == _maxCounts.length, "Mismatched params");
 
     // set the item max count
     for (uint256 i; i < _itemIds.length; i++) {
@@ -175,7 +176,7 @@ contract NiftySale is OwnableUpgradeable, ReentrancyGuardUpgradeable, PausableUp
     uint256 daoAmount = nftlBalance - burnAmount - treasuryAmount;
 
     // trasnfer tokens
-    IERC20BurnableUpgradeable(nftl).burn(burnAmount);
+    IERC20PresetMinterPauserUpgradeable(nftl).burn(burnAmount);
     IERC20Upgradeable(nftl).safeTransfer(treasury, treasuryAmount);
     IERC20Upgradeable(nftl).safeTransfer(dao, daoAmount);
 
