@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { ethers, upgrades, network } from 'hardhat';
-import { BigNumber, constants } from 'ethers';
+import { ethers, upgrades } from 'hardhat';
+import { constants } from 'ethers';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import type { NiftyItemSale, NiftyEquipment, MockERC20 } from '../typechain';
@@ -59,8 +59,28 @@ describe('NiftySale', function () {
     await nftl.transfer(bob.address, ONE_ETHER.mul(1000000)); // 1_000_000 NFTL
   });
 
+  describe('initialize', () => {
+    it('Reverts if sum of percentages is not 1000', async () => {
+      const newBurnPercentage = 100;
+      const newTreasuryPercentage = 100;
+      const newDAOPercentage = 100;
+
+      // deploy NiftySale contract
+      const NiftyItemSale = await ethers.getContractFactory('NiftyItemSale');
+      await expect(upgrades.deployProxy(NiftyItemSale, [
+        items.address,
+        nftl.address,
+        treasury.address,
+        dao.address,
+        newBurnPercentage,
+        newTreasuryPercentage,
+        newDAOPercentage
+      ])).to.be.revertedWith('Invalid percentages');
+    })
+  });
+
   describe('setItemPrices', () => {
-    it ('Should be able to set itme prices', async () => {
+    it('Should be able to set itme prices', async () => {
       const tokenIds = [7, 8, 9];
       const tokenPrices = [ONE_ETHER.mul(100), ONE_ETHER.mul(200), ONE_ETHER.mul(300)];
 
@@ -77,7 +97,7 @@ describe('NiftySale', function () {
       expect(await itemSale.itemPrices(tokenIds[2])).to.equal(tokenPrices[2]);
     });
 
-    it ('Reverts if the params are mismatched', async () => {
+    it('Reverts if the params are mismatched', async () => {
       const tokenIds = [7, 8, 9, 10];
       const tokenPrices = [ONE_ETHER.mul(100), ONE_ETHER.mul(200), ONE_ETHER.mul(300)];
 
@@ -85,7 +105,7 @@ describe('NiftySale', function () {
       await expect(itemSale.setItemPrices(tokenIds, tokenPrices)).to.be.revertedWith('Mismatched params');
     });
 
-    it ('Reverts if token ID < 7', async () => {
+    it('Reverts if token ID < 7', async () => {
       const tokenIds = [6, 8, 9];
       const tokenPrices = [ONE_ETHER.mul(100), ONE_ETHER.mul(200), ONE_ETHER.mul(300)];
 
@@ -93,20 +113,58 @@ describe('NiftySale', function () {
       await expect(itemSale.setItemPrices(tokenIds, tokenPrices)).to.be.revertedWith('Token ID less than 7');
     });
 
-    it ('Reverts if token price is less thatn 1 NFTL', async () => {
+    it('Reverts if token price is less thatn 1 NFTL', async () => {
       const tokenIds = [7, 8, 9];
       const tokenPrices = [ONE_ETHER.mul(100), 200, ONE_ETHER.mul(300)];
 
       // set item prices
       await expect(itemSale.setItemPrices(tokenIds, tokenPrices)).to.be.revertedWith('Price less than 1 NFTL');
     });
-  })
+  });
+
+  describe('purchaseItems', () => {
+    it('Should be able to set item max counts', async () => {
+      const tokenIds = [7, 8, 9];
+      const tokenMaxCount = [100, 200, 300];
+
+      expect(await itemSale.itemMaxCounts(tokenIds[0])).to.equal(0);
+      expect(await itemSale.itemMaxCounts(tokenIds[1])).to.equal(0);
+      expect(await itemSale.itemMaxCounts(tokenIds[2])).to.equal(0);
+
+      // set item max counts
+      await itemSale.setItemMaxCounts(tokenIds, tokenMaxCount);
+
+      // check item max counts
+      expect(await itemSale.itemMaxCounts(tokenIds[0])).to.equal(tokenMaxCount[0]);
+      expect(await itemSale.itemMaxCounts(tokenIds[1])).to.equal(tokenMaxCount[1]);
+      expect(await itemSale.itemMaxCounts(tokenIds[2])).to.equal(tokenMaxCount[2]);
+    });
+
+    it('Reverts if the params are mismatched', async () => {
+      const tokenIds = [7, 8, 9, 10];
+      const tokenMaxCount = [100, 200, 300];
+
+      // set item prices
+      await expect(itemSale.setItemMaxCounts(tokenIds, tokenMaxCount)).to.be.revertedWith('Mismatched params');
+    });
+
+    it('Reverts if the max count to set is less than current total supply', async () => {
+      const tokenIds = [7, 8, 9];
+      const tokenMaxCount = [1, 2, 3];
+
+      // mint some items
+      await items.mintBatch(alice.address, tokenIds, [10, 20, 30], constants.HashZero);
+
+      // set item prices
+      await expect(itemSale.setItemMaxCounts(tokenIds, tokenMaxCount)).to.be.revertedWith('Max count less than total supply');
+    });
+  });
 
   describe('purchaseItems', () => {
     beforeEach(async () => {
       const tokenIds = [7, 8, 9];
       const tokenPrices = [ONE_ETHER.mul(100), ONE_ETHER.mul(200), ONE_ETHER.mul(300)];
-      const tokenMaxCount = [100, 100, 100];
+      const tokenMaxCount = [100, 200, 300];
 
       // set item prices
       await itemSale.setItemPrices(tokenIds, tokenPrices);
@@ -144,6 +202,134 @@ describe('NiftySale', function () {
       expect(await items.balanceOf(alice.address, tokenIds[0])).to.equal(tokenAmounts[0]);
       expect(await items.balanceOf(alice.address, tokenIds[1])).to.equal(tokenAmounts[1]);
       expect(await items.balanceOf(alice.address, tokenIds[2])).to.equal(tokenAmounts[2]);
+    });
+
+    it('Reverts if params are mismatched', async () => {
+      const tokenIds = [7, 8, 9, 10];
+      const tokenAmounts = [1, 0, 5];
+
+      // get the old NFTL balance
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+
+      // purchase items
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Mismatched params');
+    });
+
+    it('Reverts if token ID < 7', async () => {
+      const tokenIds = [1, 8, 9];
+      const tokenAmounts = [1, 0, 5];
+
+      // get the old NFTL balance
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+
+      // purchase items
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Token ID less than 7');
+    });
+
+    it('Reverts if token price is 0', async () => {
+      const tokenIds = [7, 8, 9, 10];
+      const tokenAmounts = [1, 0, 5, 10];
+
+      // get the old NFTL balance
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+
+      // purchase items
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Zero price');
+    });
+
+    it('Reverts if token amount is exceeded', async () => {
+      const tokenIds = [7, 8, 9];
+      const tokenAmounts = [1, 0, 301];
+
+      // get the old NFTL balance
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+
+      // purchase items
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Max count overflow');
+    });
+  });
+
+  describe('updateTokenPercentages', () => {
+    it('Should be able to update the percentages', async () => {
+      const newBurnPercentage = 100;
+      const newTreasuryPercentage = 800;
+      const newDAOPercentage = 100;
+
+      expect(await itemSale.burnPercentage()).to.equal(BURN_PERCENTAGE);
+      expect(await itemSale.treasuryPercentage()).to.equal(TREASURY_PERCENTAGE);
+      expect(await itemSale.daoPercentage()).to.equal(DAO_PERCENTAGE);
+
+      // update percentages
+      await itemSale.updateTokenPercentages(newBurnPercentage, newTreasuryPercentage, newDAOPercentage);
+
+      // check percentages
+      expect(await itemSale.burnPercentage()).to.equal(newBurnPercentage);
+      expect(await itemSale.treasuryPercentage()).to.equal(newTreasuryPercentage);
+      expect(await itemSale.daoPercentage()).to.equal(newDAOPercentage);
+    });
+
+    it('Reverts if sum of percentages is not 1000', async () => {
+      const newBurnPercentage = 100;
+      const newTreasuryPercentage = 100;
+      const newDAOPercentage = 100;
+
+      // update percentages
+      await expect(itemSale.updateTokenPercentages(newBurnPercentage, newTreasuryPercentage, newDAOPercentage)).to.be.revertedWith('Invalid percentages');
+    });
+  });
+
+  describe('withdraw', () => {
+    beforeEach(async () => {
+      const tokenIds = [7, 8, 9];
+      const tokenPrices = [ONE_ETHER.mul(100), ONE_ETHER.mul(200), ONE_ETHER.mul(300)];
+      const tokenAmounts = [1, 0, 5];
+      const tokenMaxCount = [100, 200, 300];
+
+      // set item prices
+      await itemSale.setItemPrices(tokenIds, tokenPrices);
+
+      // set item max counts
+      await itemSale.setItemMaxCounts(tokenIds, tokenMaxCount);
+
+      // purchase items
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts);
+    });
+
+    it('Should withdraw NFTL tokens', async () => {
+      const tokenIds = [7, 8, 9];
+      const tokenAmounts = [1, 0, 5];
+
+      // get the NFTL token total supply
+      const totalSupply = await nftl.totalSupply();
+
+      expect(await nftl.balanceOf(treasury.address)).to.equal(0);
+      expect(await nftl.balanceOf(dao.address)).to.equal(0);
+
+      // get the total price
+      let totalPrice = ONE_ETHER.mul('0');
+      for (let i = 0; i < tokenIds.length; i++) {
+        totalPrice = totalPrice.add(
+          (await itemSale.itemPrices(tokenIds[i])).mul(tokenAmounts[i])
+        );
+      }
+      
+      // withdraw NFTL tokens
+      await itemSale.withdraw();
+
+      // check the balances
+      expect(await nftl.totalSupply()).to.equal(totalSupply.sub(totalPrice.mul(BURN_PERCENTAGE).div(1000)));
+      expect(await nftl.balanceOf(treasury.address)).to.equal(totalPrice.mul(TREASURY_PERCENTAGE).div(1000));
+      expect(await nftl.balanceOf(dao.address)).to.equal(totalPrice.mul(DAO_PERCENTAGE).div(1000));
+    });
+    
+    it('Reverts if the params are mismatched', async () => {
+
     });
   });
 
