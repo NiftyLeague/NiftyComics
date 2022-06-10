@@ -124,6 +124,11 @@
       "address": "0x5653566fE2bf6CdaBDC9070C3EF586429CB9D88C",
       "txHash": "0x51c1d00e94c2b0eeea6d20a1acf43e327695d67c997ac4d2117ccb0f947e1025",
       "kind": "transparent"
+    },
+    {
+      "address": "0x1DeddbD06c53B21cE44e91ABA44a323310583B86",
+      "txHash": "0xf6ce5ce379517be56c8a7695714401621b5e9d7e4dbec3115c588c7c42942ced",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -548,6 +553,189 @@
           "t_bool": {
             "label": "bool",
             "numberOfBytes": "1"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    },
+    "46032214eb4c6ac470dcc4f096bddf09d99f9a46ebe0ed883a9256d506a8cd49": {
+      "address": "0x99BB4e8573453BC0a3d9EA223f6D395A0D351B74",
+      "txHash": "0x571c13aaca5d2c1bcbb99a557c4e8ce41d1ac446e82b67eec3937e658df7e2fb",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "_status",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_uint256",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:38"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:74"
+          },
+          {
+            "label": "_paused",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_bool",
+            "contract": "PausableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:29"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "PausableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol:102"
+          },
+          {
+            "label": "items",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_address",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:24"
+          },
+          {
+            "label": "nftl",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_address",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:27"
+          },
+          {
+            "label": "itemPrices",
+            "offset": 0,
+            "slot": "203",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:30"
+          },
+          {
+            "label": "itemMaxCounts",
+            "offset": 0,
+            "slot": "204",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:33"
+          },
+          {
+            "label": "treasury",
+            "offset": 0,
+            "slot": "205",
+            "type": "t_address",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:36"
+          },
+          {
+            "label": "dao",
+            "offset": 0,
+            "slot": "206",
+            "type": "t_address",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:39"
+          },
+          {
+            "label": "burnPercentage",
+            "offset": 0,
+            "slot": "207",
+            "type": "t_uint256",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:42"
+          },
+          {
+            "label": "treasuryPercentage",
+            "offset": 0,
+            "slot": "208",
+            "type": "t_uint256",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:45"
+          },
+          {
+            "label": "daoPercentage",
+            "offset": 0,
+            "slot": "209",
+            "type": "t_uint256",
+            "contract": "NiftyItemSale",
+            "src": "contracts/NiftyItemSale.sol:48"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
           },
           "t_uint256": {
             "label": "uint256",
