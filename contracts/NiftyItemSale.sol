@@ -18,6 +18,7 @@ contract NiftyItemSale is OwnableUpgradeable, ReentrancyGuardUpgradeable, Pausab
   event ItemPriceSet(address indexed by, uint256 itemId, uint256 oldItemPrice, uint256 newItemPrice);
   event ItemMaxCountSet(address indexed by, uint256 itemId, uint256 oldItemMaxCount, uint256 newItemMaxCount);
   event TokenPercentagesUpdated(address indexed by, uint256 oldBurnPercentage, uint256 oldTreasuryPercentage, uint256 oldDAOPercentage, uint256 newBurnPercentage, uint256 newTreasuryPercentage, uint256 newDAOPercentage);
+  event ItemLimitUpdated(address indexed by, uint256 itemId, uint256 oldLimitCount, uint256 newLimitCount);
   event NFTLWitdraw(address indexed by, uint256 burnAmount, uint256 treasuryAmount, uint256 daoAmount);
 
   /// @dev NiftyItems address
@@ -29,8 +30,11 @@ contract NiftyItemSale is OwnableUpgradeable, ReentrancyGuardUpgradeable, Pausab
   /// @dev ItemID -> NFTL token amount (price)
   mapping(uint256 => uint256) public itemPrices;
   
-  /// @dev ItemID -> Max Count
+  /// @dev ItemID -> Max count
   mapping(uint256 => uint256) public itemMaxCounts;
+
+  /// @dev ItemID -> Item count limit per address
+  mapping(uint256 => uint256)  public itemLimitPerAdress;
 
   /// @dev Treasury address
   address public treasury;
@@ -73,7 +77,7 @@ contract NiftyItemSale is OwnableUpgradeable, ReentrancyGuardUpgradeable, Pausab
 
   /**
    * @notice Purchase items
-   * @dev User can purchase the several items at once and itemId must be greater than 6
+   * @dev User can purchase the several items at once
    * @dev Item total supply can't exceed the max count
    * @dev Item price is set using the NFTL token amount
    * @param _itemIds Item ID list
@@ -82,14 +86,26 @@ contract NiftyItemSale is OwnableUpgradeable, ReentrancyGuardUpgradeable, Pausab
   function purchaseItems(uint256[] calldata _itemIds, uint256[] calldata _amounts) external nonReentrant whenNotPaused {
     require(_itemIds.length == _amounts.length, "Mismatched params");
 
-    // get total price
+    // get total price and check the limit
     uint256 totalPrice;
+    uint256 itemId;
+    uint256 amount;
     for (uint256 i; i < _itemIds.length; i++) {
-      require(_itemIds[i] > 6, "Token ID less than 7");
-      require(itemPrices[_itemIds[i]] > 0, "Zero price");
-      require(IERC1155SupplyUpgradeable(items).totalSupply(_itemIds[i]) + _amounts[i] <= itemMaxCounts[_itemIds[i]], "Max count overflow");
+      itemId = _itemIds[i];
+      amount = _amounts[i];
 
-      totalPrice += itemPrices[_itemIds[i]] * _amounts[i];
+      // check the price and max count
+      require(itemPrices[itemId] > 0, "Zero price");
+      require(amount <= getRemainingItemCount(itemId), "Remaining count overflow");
+
+      // check the item limit if it's set
+      uint256 itemLimitCount = itemLimitPerAdress[itemId];
+      if (itemLimitCount > 0) {
+        uint256 userBalance = IERC1155SupplyUpgradeable(items).balanceOf(msg.sender, itemId);
+        require(userBalance + amount <= itemLimitCount, "Item limit overflow");
+      }
+
+      totalPrice += itemPrices[itemId] * amount;
     }
 
     // purchase items
@@ -124,7 +140,7 @@ contract NiftyItemSale is OwnableUpgradeable, ReentrancyGuardUpgradeable, Pausab
   /**
    * @notice Set the item max counts
    * @dev Only owner
-   * @dev Owner can set the several item max counts at once
+   * @dev Owner can set the several item max counts at once and itemId must be greater than 6
    * @dev Max count can't be less than the current total supply
    * @param _itemIds Item ID list
    * @param _maxCounts Item max count list
@@ -134,6 +150,9 @@ contract NiftyItemSale is OwnableUpgradeable, ReentrancyGuardUpgradeable, Pausab
 
     // set the item max count
     for (uint256 i; i < _itemIds.length; i++) {
+      // check item ID
+      require(_itemIds[i] > 6, "Token ID less than 7");
+
       // check if the max count is smaller than the current total supply
       require(_maxCounts[i] >= IERC1155SupplyUpgradeable(items).totalSupply(_itemIds[i]), "Max count less than total supply");
 
@@ -160,6 +179,28 @@ contract NiftyItemSale is OwnableUpgradeable, ReentrancyGuardUpgradeable, Pausab
     burnPercentage = _burnPercentage;
     treasuryPercentage = _treasuryPercentage;
     daoPercentage = _daoPercentage;
+  }
+
+  /**
+   * @notice Get the remaining item count to be able to purchase
+   * @param _itemId Item ID
+   * @return (uint256) Remaining item amount to be able to purchase
+   */
+  function getRemainingItemCount(uint256 _itemId) public view returns (uint256) {
+    return itemMaxCounts[_itemId] - IERC1155SupplyUpgradeable(items).totalSupply(_itemId);
+  }
+
+  /**
+   * @notice Limit the number of the specific items per address
+   * @dev Setting _limitCount to 0 means no limit
+   * @dev Only owner
+   * @param _itemId Item ID to limit
+   * @param _limitCount Limit number
+   */
+  function setItemLimit(uint256 _itemId, uint256 _limitCount) external onlyOwner {
+    emit ItemLimitUpdated(msg.sender, _itemId, itemLimitPerAdress[_itemId], _limitCount);
+
+    itemLimitPerAdress[_itemId] = _limitCount;
   }
 
   /**
