@@ -122,7 +122,7 @@ describe('NiftySale', function () {
     });
   });
 
-  describe('purchaseItems', () => {
+  describe('setItemMaxCounts', () => {
     it('Should be able to set item max counts', async () => {
       const tokenIds = [7, 8, 9];
       const tokenMaxCount = [100, 200, 300];
@@ -146,6 +146,14 @@ describe('NiftySale', function () {
 
       // set item prices
       await expect(itemSale.setItemMaxCounts(tokenIds, tokenMaxCount)).to.be.revertedWith('Mismatched params');
+    });
+
+    it('Reverts if tokenID < 7', async () => {
+      const tokenIds = [2, 8, 9];
+      const tokenMaxCount = [100, 200, 300];
+
+      // set item prices
+      await expect(itemSale.setItemMaxCounts(tokenIds, tokenMaxCount)).to.be.revertedWith('Token ID less than 7');
     });
 
     it('Reverts if the max count to set is less than current total supply', async () => {
@@ -173,7 +181,7 @@ describe('NiftySale', function () {
       await itemSale.setItemMaxCounts(tokenIds, tokenMaxCount);
     });
 
-    it('Should be able to purcahse items', async () => {
+    it('Should be able to purcahse items, no item limit', async () => {
       const tokenIds = [7, 8, 9];
       const tokenAmounts = [1, 0, 5];
 
@@ -204,7 +212,7 @@ describe('NiftySale', function () {
       expect(await items.balanceOf(alice.address, tokenIds[2])).to.equal(tokenAmounts[2]);
     });
 
-    it('Reverts if params are mismatched', async () => {
+    it('Reverts if params are mismatched, no item limit', async () => {
       const tokenIds = [7, 8, 9, 10];
       const tokenAmounts = [1, 0, 5];
 
@@ -216,19 +224,7 @@ describe('NiftySale', function () {
       await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Mismatched params');
     });
 
-    it('Reverts if token ID < 7', async () => {
-      const tokenIds = [1, 8, 9];
-      const tokenAmounts = [1, 0, 5];
-
-      // get the old NFTL balance
-      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
-
-      // purchase items
-      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
-      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Token ID less than 7');
-    });
-
-    it('Reverts if token price is 0', async () => {
+    it('Reverts if token price is 0, no item limit', async () => {
       const tokenIds = [7, 8, 9, 10];
       const tokenAmounts = [1, 0, 5, 10];
 
@@ -240,7 +236,7 @@ describe('NiftySale', function () {
       await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Zero price');
     });
 
-    it('Reverts if token amount is exceeded', async () => {
+    it('Reverts if the item price was set, the item max count was set, and token amount to purcahse is exceeded, no item limit', async () => {
       const tokenIds = [7, 8, 9];
       const tokenAmounts = [1, 0, 301];
 
@@ -249,7 +245,81 @@ describe('NiftySale', function () {
 
       // purchase items
       await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
-      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Max count overflow');
+      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Remaining count overflow');
+    });
+
+    it('Reverts if the item price was set, the item max count wasn not set, and token amount to purcahse is exceeded, no item limit', async () => {
+      // add additiaion item price
+      await itemSale.setItemPrices([10], [ONE_ETHER.mul(100)]);
+
+      const tokenIds = [7, 8, 9, 10];
+      const tokenAmounts = [1, 0, 301, 10];
+
+      // get the old NFTL balance
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+
+      // purchase items
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Remaining count overflow');
+    });
+
+    it('Should be able to purcahse items if item limit > 0 and the item count to purcahse is valid', async () => {
+      const tokenId = 7;
+      const limitCount = 1;
+
+      // set item limit
+      await itemSale.setItemLimit(tokenId, limitCount);
+
+      const tokenIds = [7, 8, 9];
+      const tokenAmounts = [1, 0, 5];
+
+      expect(await items.balanceOf(alice.address, tokenIds[0])).to.equal(0);
+      expect(await items.balanceOf(alice.address, tokenIds[1])).to.equal(0);
+      expect(await items.balanceOf(alice.address, tokenIds[2])).to.equal(0);
+
+      // get the old NFTL balance
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+      
+      // purchase items
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts);
+
+      // get the total price
+      let totalPrice = ONE_ETHER.mul('0');
+      for (let i = 0; i < tokenIds.length; i++) {
+        totalPrice = totalPrice.add(
+          (await itemSale.itemPrices(tokenIds[i])).mul(tokenAmounts[i])
+        );
+      }
+
+      // check balances
+      const aliceNFTLBalanceAfter = await nftl.balanceOf(alice.address);
+      expect(aliceNFTLBalanceAfter).to.equal(aliceNFTLBalanceBefore.sub(totalPrice));
+      expect(await items.balanceOf(alice.address, tokenIds[0])).to.equal(tokenAmounts[0]);
+      expect(await items.balanceOf(alice.address, tokenIds[1])).to.equal(tokenAmounts[1]);
+      expect(await items.balanceOf(alice.address, tokenIds[2])).to.equal(tokenAmounts[2]);
+    });
+
+    it('Revert if item limit > 0 and the item count to purcahse is valid', async () => {
+      const tokenId = 7;
+      const limitCount = 1;
+
+      // set item limit
+      await itemSale.setItemLimit(tokenId, limitCount);
+
+      const tokenIds = [7, 8, 9];
+      const tokenAmounts = [2, 0, 5];
+
+      expect(await items.balanceOf(alice.address, tokenIds[0])).to.equal(0);
+      expect(await items.balanceOf(alice.address, tokenIds[1])).to.equal(0);
+      expect(await items.balanceOf(alice.address, tokenIds[2])).to.equal(0);
+
+      // get the old NFTL balance
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+      
+      // purchase items
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await expect(itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts)).to.be.revertedWith('Item limit overflow');
     });
   });
 
@@ -279,6 +349,58 @@ describe('NiftySale', function () {
 
       // update percentages
       await expect(itemSale.updateTokenPercentages(newBurnPercentage, newTreasuryPercentage, newDAOPercentage)).to.be.revertedWith('Invalid percentages');
+    });
+  });
+
+  describe('getRemainingItemCount', () => {
+    beforeEach(async () => {
+      const tokenIds = [7, 8, 9];
+      const tokenPrices = [ONE_ETHER.mul(100), ONE_ETHER.mul(200), ONE_ETHER.mul(300)];
+      const tokenMaxCount = [100, 0, 300];
+
+      // set item prices
+      await itemSale.setItemPrices(tokenIds, tokenPrices);
+
+      // set item max counts
+      await itemSale.setItemMaxCounts(tokenIds, tokenMaxCount);
+    });
+
+    it('Should be able to return the remaining itme count', async () => {
+      const tokenIds = [7, 8, 9];
+      const tokenAmounts = [0, 0, 5];
+
+      // check old remaining item count
+      expect(await itemSale.getRemainingItemCount(tokenIds[0])).to.equal(100);
+      expect(await itemSale.getRemainingItemCount(tokenIds[1])).to.equal(0);
+      expect(await itemSale.getRemainingItemCount(tokenIds[2])).to.equal(300);
+
+      // get the old NFTL balance
+      const aliceNFTLBalanceBefore = await nftl.balanceOf(alice.address);
+      
+      // purchase items
+      await nftl.connect(alice).approve(itemSale.address, aliceNFTLBalanceBefore);
+      await itemSale.connect(alice).purchaseItems(tokenIds, tokenAmounts);
+
+      // check new remaining item count
+      expect(await itemSale.getRemainingItemCount(tokenIds[0])).to.equal(100);
+      expect(await itemSale.getRemainingItemCount(tokenIds[1])).to.equal(0);
+      expect(await itemSale.getRemainingItemCount(tokenIds[2])).to.equal(295);
+    });
+  });
+
+  describe('setItemLimit', () => {
+    it('Should be able to set the item limit', async () => {
+      const tokenId = 7;
+      const limitCount = 10;
+
+      // check old item limit
+      expect(await itemSale.itemLimitPerAdress(tokenId)).to.equal(0);
+      
+      // set the item limit
+      await itemSale.setItemLimit(tokenId, limitCount);
+
+      // check new item limit
+      expect(await itemSale.itemLimitPerAdress(tokenId)).to.equal(limitCount);
     });
   });
 
